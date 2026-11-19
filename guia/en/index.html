@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>right effort — Fable or Opus, and at what effort level</title>
+<meta name="description" content="Free kit for Claude Code: audits which model and effort your project uses, points out what is unnecessarily expensive (fixed Max, Xhigh as the default), provides a ready-to-use rule for CLAUDE.md, and an A/B test through your subscription.">
+<link rel="alternate" hreflang="pt-BR" href="https://inematds.github.io/esforco-certo/guia/">
+<link rel="alternate" hreflang="en" href="https://inematds.github.io/esforco-certo/guia/en/">
+<link rel="alternate" hreflang="es" href="https://inematds.github.io/esforco-certo/guia/es/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c10; --bg2:#14141b; --card:#16161e; --line:#272730;
+    --txt:#e9e9ee; --mut:#9a9aa6; --amb:#E2A23B; --amb2:#f0c070; --sky:#38bdf8; --pro:#cbd5e1;
+    color-scheme:dark;
+  }
+  body.light{
+    --bg:#f6f7f9; --bg2:#eceef2; --card:#ffffff; --line:#e1e3ea;
+    --txt:#1a1a22; --mut:#5b5b68; --amb:#b9791d; --amb2:#a16207; --sky:#0369a1; --pro:#b45309;
+    color-scheme:light;
+  }
+  body.light .hero .glow{opacity:.5}
+  body.light pre{background:#0e0e14;color:#d6d6e0}
+  body.light pre .c{color:#8a8a98}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15;margin:0}
+  a{color:var(--amb);text-decoration:none}
+  code,pre{font-family:"JetBrains Mono",monospace}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+  .mut{color:var(--mut)} .amb{color:var(--amb)}
+  .chip{display:inline-block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amb);font-weight:600;font-family:Sora}
+  nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(12px);background:rgba(12,12,16,.78);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:22px;height:60px}
+  nav .brand{display:flex;align-items:center;gap:8px;font-family:Sora;font-weight:800;letter-spacing:-.02em;color:var(--amb)}
+  nav .brand .emoji{font-size:1.25rem}
+  nav .sep{color:var(--mut);opacity:.45}
+  nav .inema{color:var(--sky);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .inema:hover{filter:brightness(1.15)}
+  nav .pro{color:var(--pro);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .pro:hover{filter:brightness(1.15)}
+  nav .clubpro{display:inline-flex;align-items:center;gap:6px}
+  nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
+  nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
+  .lang{display:inline-flex;gap:2px;font-family:Sora;font-size:.78rem}
+  .lang a{color:var(--mut);padding:.2em .45em;border-radius:6px} .lang a.on{color:var(--amb);background:rgba(226,162,59,.12)}
+  .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
+  .tgl:hover{border-color:var(--amb)}
+  .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
+  .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  @media(max-width:760px){nav .links a.sec{display:none}}
+  @media(max-width:520px){nav .wrap{gap:8px;padding:8px 14px;height:auto;flex-wrap:wrap} nav .links{gap:8px;margin-left:0;width:100%;justify-content:space-between} nav .btn{padding:.45em .7em;font-size:.82rem} .tgl{width:34px;height:34px}}
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(226,162,59,.22),transparent 70%);pointer-events:none}
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:74px 22px}
+  .hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;letter-spacing:-.025em}
+  .hero p.lead{font-size:1.18rem;color:var(--mut);margin:1.1em 0 1.6em;max-width:34ch}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero figure{margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000}
+  .hero figure img{width:100%;height:auto;display:block}
+  .resumo{padding:38px 0 34px;border-bottom:1px solid var(--line)}
+  .resumo p{font-size:1.12rem;line-height:1.7;max-width:74ch;margin:.55em 0 0}
+  @media(max-width:780px){.hero .wrap{grid-template-columns:1fr;padding:48px 22px}}
+  section{padding:62px 0;border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em}
+  section .sub{color:var(--mut);margin:.6em 0 2em;max-width:62ch}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.g3,.g4{grid-template-columns:1fr 1fr}}
+  @media(max-width:540px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{font-size:1.05rem;margin-bottom:.4em}
+  .card p{color:var(--mut);font-size:.92rem;margin:0}
+  .num{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:8px;background:rgba(226,162,59,.14);color:var(--amb);font-family:Sora;font-weight:800;font-size:.9rem;margin-bottom:.7em}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+  .flow span{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:.45em .9em;font-size:.85rem;font-family:Sora;font-weight:600}
+  .flow .arr{color:var(--amb);border:none;background:none;padding:0 .1em}
+  pre{background:#0a0a0e;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;font-size:.86rem;line-height:1.6;color:#d6d6e0}
+  pre .c{color:#6f6f7c} pre .k{color:var(--amb2)} pre .s{color:#9ece6a}
+  @media(max-width:520px){pre{white-space:pre-wrap;overflow-wrap:anywhere}}
+  .step{display:grid;grid-template-columns:46px minmax(0,1fr);gap:16px;margin-bottom:26px}
+  .step>div,.card{min-width:0}
+  p code,li code,td code{overflow-wrap:anywhere}
+  .step .b{width:46px;height:46px;border-radius:12px;background:var(--amb);color:#1a1206;font-family:Sora;font-weight:800;font-size:1.25rem;display:flex;align-items:center;justify-content:center}
+  .step h3{font-size:1.12rem;margin-bottom:.3em}
+  .step p{color:var(--mut);margin:.2em 0 .7em}
+  .ex{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.ex{grid-template-columns:1fr}}
+  .ex figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .ex figure img{width:100%;height:auto;display:block}
+  .ex figcaption{padding:12px 14px;font-size:.88rem;color:var(--mut);background:var(--card)}
+  .phase{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .phase:last-child{border:none}
+  .phase .tag{flex:0 0 92px;font-family:Sora;font-weight:800;color:var(--amb)}
+  .phase .d strong{display:block;margin-bottom:.2em}
+  .phase .d span{color:var(--mut);font-size:.92rem}
+  footer{padding:46px 0;text-align:center;color:var(--mut);font-size:.9rem}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.3em .8em;font-size:.78rem;color:var(--mut);margin:0 4px}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="brand" href="#top"><span class="emoji">🎚️</span> right effort</a>
+  <span class="sep">|</span>
+  <span class="clubpro">
+    <a class="inema" href="https://inema.club" target="_blank" rel="noopener">INEMA.CLUB</a>
+    <span class="sep">-</span>
+    <a class="pro" href="https://inema.pro" target="_blank" rel="noopener">PRO</a>
+  </span>
+  <div class="links">
+    <a class="sec" href="#oque">What it is</a>
+    <a class="sec" href="#numeros">The numbers</a>
+    <a class="sec" href="#comparar">Compare</a>
+    <a class="sec" href="#guia">How to use it</a>
+    <a class="sec" href="#exemplos">Examples</a>
+    <a class="sec" href="#roadmap">Roadmap</a>
+    <span class="lang"><a href="../">PT</a><a class="on" href="./">EN</a><a href="../es/">ES</a></span>
+    <button class="tgl" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+    <a class="btn" href="https://github.com/inematds/esforco-certo" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div>
+      <span class="chip">Free kit · Claude Code</span>
+      <h1>Fable or Opus? Pay for the <span class="amb">right effort</span></h1>
+      <p class="lead">Find out which model and effort level each part of your Claude Code project uses, see what is unnecessarily expensive, and measure before switching.</p>
+      <div class="cta">
+        <a class="btn" href="#guia">Start the guide</a>
+        <a class="btn ghost" href="https://github.com/inematds/esforco-certo" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+    </div>
+    <figure><img src="../assets/banner-en.jpg" alt="right effort kit banner: Fable or Opus, and at what effort level"></figure>
+  </div>
+</header>
+
+<section id="resumo" class="resumo"><div class="wrap">
+  <span class="chip">In short</span>
+  <p>right effort is a free kit for people who use Claude Code with projects and bots. It reads your project's settings, agents, and scripts, then shows which model (Fable, Opus, Sonnet, Haiku) and effort level each one uses. Effort is how much the model thinks before responding, on a five-level scale: <code>low</code> &lt; <code>medium</code> &lt; <code>high</code> &lt; <code>xhigh</code> &lt; <code>max</code>. It points out what is unnecessarily expensive, provides a ready-to-paste rule for your CLAUDE.md, and includes a test that runs the same task at two effort levels through your subscription so you can compare. You need Python 3 and, for the test, Claude Code; the audit uses no internet or API.</p>
+</div></section>
+
+<section id="video"><div class="wrap">
+  <span class="chip">Video</span>
+  <h2>Fable or Opus, and at which effort: two and a half minutes</h2>
+  <div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000;margin:0 0 14px"><iframe src="https://www.youtube-nocookie.com/embed/ZA0T9Z0PVNs" title="Video: Fable 5.2 or Opus 5.5? Don't pay for Max effort" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div>
+  <p class="sub"><a href="https://www.youtube.com/watch?v=ZA0T9Z0PVNs" target="_blank" rel="noopener">Open on YouTube (Portuguese) →</a> · <a href="https://www.youtube.com/watch?v=ZPIZptnrtlg" target="_blank" rel="noopener">9:16</a></p>
+</div></section>
+
+<section id="oque"><div class="wrap">
+  <span class="chip">What it is</span>
+  <h2>Three tools to avoid paying for the top tier unnecessarily</h2>
+  <p class="sub">When Fable 5.2 launched (Nov 9, 2026), Anthropic itself recommended starting with Opus 5.5 and moving up to Fable only for the hardest work. This kit turns that advice into something you can apply and check.</p>
+  <figure style="margin:0 0 26px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000"><img src="../assets/banner-grade-en.jpg" alt="Kit components: audit, ready-to-use rule, A/B test, ready-made agents, reset plan, no API" loading="lazy" style="width:100%;display:block"></figure>
+  <div class="grid g3">
+    <div class="card"><h3>🔎 One-command audit</h3><p><code>auditar.py</code> scans settings, agents, skills, scripts, timers, and code that calls the API, then lists what fixes the model and effort. It flags a fixed Max, Xhigh as the default, and Fable as the default.</p></div>
+    <div class="card"><h3>📋 Ready-to-use rule + agents</h3><p><code>politica/CLAUDE-esforco.md</code> is the block to paste into CLAUDE.md. The <code>agentes/</code> folder includes three ready-made agents: everyday work (Opus, medium), long tasks (Fable, high), and mechanical work (Haiku, low).</p></div>
+    <div class="card"><h3>⚖️ A/B test through your subscription</h3><p><code>ab.sh</code> runs the same request with two or more model and effort combinations, then creates a report with time, tokens, equivalent cost, the model that actually ran, and whether your test passed.</p></div>
+  </div>
+</div></section>
+
+<section id="numeros"><div class="wrap">
+  <span class="chip">The numbers</span>
+  <h2>In the coding test, Max did less and cost 3× as much</h2>
+  <p class="sub">FrontierCode 2.0 measures whether people who maintain open-source projects would accept the model's code. Values read from the cost-per-task chart on <a href="https://www.anthropic.com/claude-fable-and-mythos-5-2" target="_blank" rel="noopener">Anthropic's page</a> (the company's own tests).</p>
+  <div class="grid g4">
+    <div class="card"><span class="num">1</span><h3>Fable · high</h3><p><strong>45.3%</strong> at about US$ 7 per task. Ties the best score from Opus 5.5 at about half the cost.</p></div>
+    <div class="card"><span class="num">2</span><h3>Opus 5.5 · max</h3><p><strong>45.5%</strong> at about US$ 13 per task: Opus's best score, at the highest effort level. (For everyday work, Anthropic recommends Opus; the kit's rule uses medium.)</p></div>
+    <div class="card"><span class="num">3</span><h3>Fable · xhigh</h3><p><strong>49.1%</strong> at about US$ 15. The highest score among the released models Anthropic tested.</p></div>
+    <div class="card"><span class="num">4</span><h3>Fable · max</h3><p><strong>~45.7%</strong> at about US$ 45: lower than xhigh, at about 3× the cost. That's why Max is not the default.</p></div>
+  </div>
+  <p class="sub" style="margin-top:1.4em">Two things to keep in mind. At medium effort, Fable scores about 3 points higher than Opus at the same cost; and in another test (hardware design), the best result came at Max. The rule is not "never Max"; it's "Max only after measuring." The entire score table uses each model's highest available effort, while Claude Code defaults to medium: those scores do not reflect what you run.</p>
+</div></section>
+
+<section id="comparar"><div class="wrap">
+  <span class="chip">Compare without fooling yourself</span>
+  <h2>Looking better isn’t winning: capability, interpretation, or effort?</h2>
+  <p class="sub">Comparisons like “same prompt, which one looked better” mix three things. If one model runs for much longer and costs much more, some of the difference may simply come from greater effort. Going beyond the request (animation, images, characters) may impress evaluators, but it doesn’t mean the model fulfilled the request better: in a game, making it look better while losing at gameplay means a worse result.</p>
+  <div class="grid g3">
+    <div class="card"><h3>🧠 Capability</h3><p>Can the model see on its own how to improve the project, without being told?</p></div>
+    <div class="card"><h3>🎯 Interpretation</h3><p>Did it understand the goal better and make the right decisions—including about what was implied?</p></div>
+    <div class="card"><h3>⏱️ Effort</h3><p>Did it spend more time, reasoning, tools, and money to get there?</p></div>
+  </div>
+  <h3 style="margin-top:1.6em">The three experiments that separate these factors</h3>
+  <div class="grid g3">
+    <div class="card"><span class="num">1</span><h3>Same budget</h3><p>Same prompt, same turn and time limits, same tools. <strong>Answers:</strong> who delivers higher quality with equal resources.</p><pre><span class="k">./ab.sh</span> "&lt;task&gt;" --turnos 30 \
+  -c opus:high -c fable:high</pre></div>
+    <div class="card"><span class="num">2</span><h3>Best effort</h3><p>Each model at the effort level where it performs best, with all costs recorded. <strong>Answers:</strong> which produces the best final result, and how much it costs.</p><pre><span class="k">./ab.sh</span> "&lt;task&gt;" \
+  -c opus:xhigh -c fable:xhigh</pre></div>
+    <div class="card"><span class="num">3</span><h3>Same result</h3><p>Objective criteria written in advance; both work until they meet the standard. <strong>Answers:</strong> how many rounds, corrections, and minutes of your time the finished product takes.</p><pre><span class="k">./ab.sh</span> "&lt;task + criteria&gt;" \
+  --editar --checar "npm test" \
+  -c opus:high -c fable:high</pre></div>
+  </div>
+  <p class="sub" style="margin-top:1.4em">A single attempt doesn’t prove that a model interprets all requirements better, writes better code, makes fewer mistakes, needs fewer interventions, or delivers more per dollar. The right question is <strong>which one turns a specification into an excellent, functional product at the lowest total cost</strong>. The full protocol, including the evaluation form (request × extras, blind evaluation, cost = model + your time), is at <a href="https://github.com/inematds/esforco-certo/blob/main/politica/comparar-modelos.en.md" target="_blank" rel="noopener"><code>politica/comparar-modelos.en.md</code></a>.</p>
+</div></section>
+
+<section id="fluxo"><div class="wrap">
+  <span class="chip">How it works</span>
+  <h2>Audit, decide on a rule, measure, lock it in</h2>
+  <p class="sub">Nothing changes on its own: the kit reads and suggests; you choose whether to change the model or effort level.</p>
+  <div class="flow">
+    <span>auditar.py</span><span class="arr">→</span>
+    <span>Read the alerts</span><span class="arr">→</span>
+    <span>Paste the rule into CLAUDE.md</span><span class="arr">→</span>
+    <span>ab.sh measures your work</span><span class="arr">→</span>
+    <span>Choose the default</span><span class="arr">→</span>
+    <span>--estrito in CI</span>
+  </div>
+</div></section>
+
+<section id="pre"><div class="wrap">
+  <span class="chip">Prerequisites</span>
+  <h2>What you need</h2>
+  <p class="sub">Linux, macOS, or WSL. The audit works on its own; the A/B test uses Claude Code signed in to your subscription.</p>
+  <div class="grid g3">
+    <div class="card"><h3>Python 3.8+</h3><p>For <code>auditar.py</code> (standard library only).</p><pre><span class="c"># check</span>
+<span class="k">python3</span> --version</pre></div>
+    <div class="card"><h3>Claude Code</h3><p>For <code>ab.sh</code>: the <code>claude</code> command in your PATH, signed in to your subscription.</p><pre><span class="c"># check</span>
+<span class="k">claude</span> --version</pre></div>
+    <div class="card"><h3>git</h3><p>To download the kit and use the test's <code>--editar</code> mode (one project copy per combination).</p><pre><span class="c"># check</span>
+<span class="k">git</span> --version</pre></div>
+  </div>
+</div></section>
+
+<section id="guia"><div class="wrap">
+  <span class="chip">How to use it · step by step</span>
+  <h2>From scratch to the right default in 8 steps</h2>
+  <p class="sub">Replace <code>~/meu-projeto</code> with your project folder.</p>
+
+  <div class="step"><div class="b">1</div><div>
+    <h3>Download the kit</h3>
+    <p>A small repository: two scripts, the rule, three agents, and Fable's reset plan (what a reset is: <a href="#guia-resets">step 8</a>).</p>
+<pre><span class="k">git clone</span> \
+  <span class="s">https://github.com/inematds/esforco-certo.git</span>
+<span class="k">cd</span> esforco-certo</pre>
+  </div></div>
+
+  <div class="step"><div class="b">2</div><div>
+    <h3>Audit your project</h3>
+    <p>First, a risk-free test on the sample project included in the kit (it intentionally produces 8 alerts). Then, your project: the list shows every place that fixes a model or effort level, with file and line. <code style="white-space:nowrap">--home</code> includes your <code>~/.claude</code> (global settings, agents, and skills) and the user's systemd timers.</p>
+<pre><span class="k">python3 auditar.py</span> tests/fixture      <span class="c"># kit sample</span>
+<span class="k">python3 auditar.py</span> ~/meu-projeto \
+  --home                             <span class="c"># your project</span>
+<span class="k">python3 auditar.py</span> ~/meu-projeto \
+  --json > aud.json                  <span class="c"># for another script to read</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">3</div><div>
+    <h3>Read the alerts</h3>
+    <p><strong>MAX</strong>: fixed max effort — switch to high (or xhigh if measuring shows a gain). <strong>PADRAO_ALTO</strong>: xhigh as the global or model default — every request pays for the top level. <strong>FABLE_PADRAO</strong>: Fable as the default model — it uses up your limit faster. The <strong>tips</strong> show bots using <code>claude -p</code> without <code>--model</code> (they inherit the account default); a tip is not an alert and will not make <code>--estrito</code> fail.</p>
+<pre><span class="c"># where to change Claude Code's default (example)</span>
+<span class="c"># this session only:</span>
+<span class="k">claude</span> --model opus --effort medium
+<span class="c"># or in .claude/settings.json: "model": "opus", "effortLevel": "medium"</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">4</div><div>
+    <h3>Paste the rule into CLAUDE.md</h3>
+    <p>Opus medium for everyday work, Fable high for long tasks, xhigh only after measuring, never Max as the default, and always use <code>--model</code> and <code>--effort</code> for bots.</p>
+<pre><span class="k">cat</span> politica/CLAUDE-esforco.md \
+  >> ~/meu-projeto/CLAUDE.md</pre>
+  </div></div>
+
+  <div class="step"><div class="b">5</div><div>
+    <h3>Use the ready-made agents</h3>
+    <p>Claude Code chooses an agent based on its description; each one already has the model and effort level in its header.</p>
+<pre><span class="k">mkdir -p</span> ~/meu-projeto/.claude/agents
+<span class="k">cp</span> agentes/*.md ~/meu-projeto/.claude/agents/
+<span class="c"># save the rule and agents in a commit (step 6 uses the latest commit)</span>
+<span class="k">cd</span> ~/meu-projeto &amp;&amp; <span class="k">git add</span> CLAUDE.md .claude/agents \
+  &amp;&amp; <span class="k">git commit</span> -m <span class="s">"model and effort: rule and agents"</span>
+<span class="k">cd</span> -</pre>
+  </div></div>
+
+  <div class="step"><div class="b">6</div><div>
+    <h3>Measure before switching models</h3>
+    <p>Without <code>-c</code>, it runs three combinations: <code>opus:high</code>, <code>fable:medium</code>, and <code>fable:high</code> (two with Fable, which uses up your limit faster). Without <code>--editar</code>, each run only reads the project. With <code>--editar</code>, each combination works in its own copy of the latest commit (git worktree), so the project must have no pending changes; <code>--checar</code> runs your test inside each copy. The copy does not include folders outside git (<code>node_modules</code>, <code>.venv</code>): install dependencies in <code>--checar</code> itself. The report shows time, tokens, the model that actually ran, and the <em>equivalent cost</em> — the price from the API price list; with a subscription, you use your limit, not dollars. Start with a small, real task.</p>
+<pre><span class="k">./ab.sh</span> <span class="s">"Review src/ and list the 5 most serious risks"</span> \
+  --dir ~/meu-projeto
+<span class="k">./ab.sh</span> <span class="s">"Fix the broken test in tests/"</span> \
+  --dir ~/meu-projeto --editar \
+  --checar <span class="s">"npm ci &amp;&amp; npm test"</span> \
+  -c opus:high -c fable:high
+<span class="c"># result: ~/meu-projeto/.ab/resultado-&lt;data&gt;/RESULTADO.md</span>
+<span class="c"># (add .ab/ to the project's .gitignore)</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">7</div><div>
+    <h3>Lock it in CI (optional)</h3>
+    <p>With <code>--estrito</code>, the auditor exits with code 1 if there are alerts, and the CI step fails. This keeps anyone from accidentally leaving Max or Fable as the default. Copy <code>auditar.py</code> (a single file with no dependencies) into your project and call it in CI from the project root; it does not audit itself. Works on Linux and macOS (on macOS, <code>ab.sh</code> uses <code>gtimeout</code> from <code>brew install coreutils</code>, if available).</p>
+<pre><span class="k">mkdir -p</span> ~/meu-projeto/tools
+<span class="k">cp</span> auditar.py ~/meu-projeto/tools/
+<span class="c"># in the project's CI (e.g. a GitHub Actions step):</span>
+<span class="k">python3</span> tools/auditar.py . --estrito</pre>
+  </div></div>
+
+  <div class="step" id="guia-resets"><div class="b">8</div><div>
+    <h3>Use Fable resets for a long task</h3>
+    <p>During the launch promotion, which runs through Nov 16, 2026, subscribers received 1 to 3 Fable <strong>resets</strong>: each reset clears Fable's usage counter so you can keep using it during the same week. On Pro and standard Team, Fable use can take up to half the plan's weekly limit. <code>resets.md</code> is the plan: choose a long task, prepare it in Opus, run it in Fable high, and wrap up in Opus. After Nov 16, the same plan works for any long task in Fable.</p>
+<pre><span class="k">less</span> resets.md
+<span class="k">claude</span> --model fable --effort high   <span class="c"># in the long-task session</span></pre>
+  </div></div>
+</div></section>
+
+<section id="pedir"><div class="wrap">
+  <span class="chip">Tips · how to request effort</span>
+  <h2>Can you request effort in natural language?</h2>
+  <p class="sub">It depends on who will run it. Asking in the conversation does not change the effort of the session you are speaking in; it changes the effort of the work you ask to delegate.</p>
+  <div class="grid g2">
+    <div class="card"><h3>1. In the current session: command</h3><p>Writing "use high effort" in the conversation changes nothing: the model does not change its own effort. Use the <code>/effort</code> command (or <code>/model</code> to switch models), or start the session with the effort already set.</p>
+<pre><span class="k">/effort</span> high
+<span class="c"># or, when starting the session:</span>
+<span class="k">claude</span> --model opus --effort high</pre></div>
+    <div class="card"><h3>2. Subagents: natural language</h3><p>For delegated work, asking in the conversation works. Claude passes the model and effort to the subagent, and only sets the effort when you explicitly ask; without a request, the agent's default applies.</p>
+<pre><span class="s">"do the review with an Opus subagent at high effort"</span>
+<span class="s">"run this search on Haiku, low effort"</span></pre></div>
+    <div class="card"><h3>3. Fixed rule: CLAUDE.md and agents</h3><p>Written in CLAUDE.md, it counts as an explicit request in every session, with no need to repeat it. Agents with <code>model:</code> and <code>effort:</code> in the header, like the three in the kit, start with the right effort already set.</p>
+<pre><span class="c"># in CLAUDE.md</span>
+- reviews: Opus on high
+- mechanical tasks: Haiku on low</pre></div>
+    <div class="card"><h3>4. Bots: command-line option</h3><p>With <code>claude -p</code>, effort is set only through the <code>--effort</code> option. Without it, the bot inherits the account default, and <code>auditar.py</code> will warn you.</p>
+<pre><span class="k">claude</span> -p --model opus --effort medium \
+  <span class="s">"summarize today's log"</span></pre></div>
+  </div>
+</div></section>
+
+<section id="exemplos"><div class="wrap">
+  <span class="chip">Examples</span>
+  <h2>What the kit actually showed</h2>
+  <p class="sub">Run on Nov 9, 2026: the kit's sample project, an INEMA production machine, and the A/B test itself. The last card shows one of the ready-made agents.</p>
+  <div class="grid g2">
+    <div class="card"><h3>Sample project (<code>tests/fixture</code>)</h3>
+<pre><span class="c"># cd tests/fixture &amp;&amp; python3 ../../auditar.py .</span>
+17 lugares fixam modelo ou esforço · 8 alertas · 3 dicas
+Modelos: fable 6 · opus 5 · herda 2 · codex 2 · variavel 1 · haiku 1
+- MAX          ./scripts/api.py:4
+- MAX          ./scripts/rodar.sh:3
+- FABLE_PADRAO ./.claude/settings.json:2
+- PADRAO_ALTO  ./.claude/settings.json:3
+… e mais 4 alertas</pre>
+      <p>Full report in <a href="https://github.com/inematds/esforco-certo/blob/main/exemplos/auditoria-exemplo.md" target="_blank" rel="noopener">exemplos/auditoria-exemplo.md</a> (in Portuguese).</p></div>
+    <div class="card"><h3>Production machine (3 projects + ~/.claude)</h3>
+<pre>38 lugares fixam modelo ou esforço · 3 alertas
+- FABLE_PADRAO ~/.claude/settings.json  (modelo padrão = fable)
+- PADRAO_ALTO  ~/.claude/settings.json  (Opus 5.5 em xhigh por padrão)
+- PADRAO_ALTO  ~/.claude/settings.json  (Fable 5.1 em xhigh por padrão)</pre>
+      <p>Exactly what Anthropic's page says to avoid: the top level as the default. 13 bots receive the model from a variable read from a central model file (good: change it in one place).</p></div>
+    <div class="card"><h3>A/B test: the model that actually ran</h3>
+<pre>| haiku-low  | ok (claude-haiku-5-5)  | 12 s | 434 tokens |
+| sonnet-low | ok (claude-sonnet-5-5) | 16 s | 539 tokens |</pre>
+      <p>In the first version, the read-only test used <em>plan</em> mode, where Claude Code silently switched Haiku to Sonnet. That's why <code>ab.sh</code> shows the model used and displays "⚠ requested X, ran Y" when they differ.</p></div>
+    <div class="card"><h3>Long-task agent</h3>
+<pre>---
+name: trabalho-longo
+model: fable
+effort: high
+---</pre>
+      <p>Before making changes, it writes down the goal, success criteria, and what not to do; tests each step; and does not move up to max on its own.</p></div>
+  </div>
+</div></section>
+
+<section id="roadmap"><div class="wrap">
+  <span class="chip">Roadmap</span>
+  <h2>What is available now and what may come next</h2>
+  <p class="sub">The kit is small by design. New ideas will only be added if they help you make better decisions.</p>
+  <div class="phase"><div class="tag">1.0 · today</div><div class="d"><strong>Audit, rule, agents, A/B test, reset plan</strong><span>All tested: 19 offline tests and ab.sh run in both modes.</span></div></div>
+  <div class="phase"><div class="tag">Idea</div><div class="d"><strong>Actual usage by effort</strong><span>Use the records Claude Code already saves to add up how much of your limit each model and effort level used during the week (as the sibling kit <a href="https://inematds.github.io/medidor-de-limite/guia/" target="_blank" rel="noopener">medidor-de-limite</a> does by project).</span></div></div>
+  <div class="phase"><div class="tag">Idea</div><div class="d"><strong>Ready-made change suggestion</strong><span>For each alert, show the exact line to change — without applying it automatically.</span></div></div>
+</div></section>
+
+<footer>
+  <div class="wrap">
+    <div class="pill">Python 3</div><div class="pill">Bash</div><div class="pill">Claude Code</div>
+    <p style="margin-top:18px">right effort · free · read-only audit, no API ·
+      <a href="https://github.com/inematds/esforco-certo">inematds/esforco-certo</a> ·
+      <a href="https://inema.club">INEMA.CLUB</a></p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var KEY='esforco-certo-theme';
+    var b=document.body, t=document.getElementById('themeToggle');
+    if(localStorage.getItem(KEY)==='light'){ b.classList.add('light'); t.textContent='☀️'; }
+    t.addEventListener('click',function(){
+      var light=b.classList.toggle('light');
+      t.textContent=light?'☀️':'🌙';
+      localStorage.setItem(KEY, light?'light':'dark');
+    });
+  })();
+</script>
+</body>
+</html>
