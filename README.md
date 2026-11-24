@@ -1,4 +1,4 @@
-﻿# esforÃ§o certo
+# esforÃ§o certo
 
 <div align="center">
   <img src="capa/logo.svg" alt="Arckhé AI" height="48" />
@@ -6,7 +6,7 @@
 </div>
 
 
-[![esforÃ§o certo](guia/assets/banner.jpg)](https://inematds.github.io/esforco-certo/guia/)
+[![esforÃ§o certo](guia/assets/banner.jpg)](https://linnoff88-dev.github.io/
 
 **ðŸ‡§ðŸ‡· [PortuguÃªs](README.md) Â· ðŸ‡ºðŸ‡¸ [English](README.en.md) Â· ðŸ‡ªðŸ‡¸ [EspaÃ±ol](README.es.md)**
 
@@ -16,7 +16,7 @@ O esforÃ§o certo Ã© um kit gratuito para quem usa o Claude Code em projetos 
 
 ## ðŸ“– Guia de uso
 
-Guia completo (landing + passo a passo): **https://inematds.github.io/esforco-certo/guia/**
+Guia completo (landing + passo a passo): **https://linnoff88-dev.github.io/
 
 ## Por quÃª
 
@@ -38,7 +38,7 @@ medium por padrÃ£o.
 ## ComeÃ§o rÃ¡pido
 
 ```bash
-git clone https://github.com/inematds/esforco-certo.git
+git clone https://github.com/linnoff88-dev/esforco-certo.git
 cd esforco-certo
 python3 auditar.py ~/meu-projeto --home          # quem roda em qual modelo/esforÃ§o, e o que estÃ¡ caro
 cat politica/CLAUDE-esforco.md >> ~/meu-projeto/CLAUDE.md
@@ -62,7 +62,7 @@ cat politica/CLAUDE-esforco.md >> ~/meu-projeto/CLAUDE.md
 
 | # | Passo | Comando | Quem |
 |---|---|---|---|
-| 1 | Baixar o kit | `git clone https://github.com/inematds/esforco-certo.git` | ðŸ§  vocÃª |
+| 1 | Baixar o kit | `git clone https://github.com/linnoff88-dev/esforco-certo.git` | ðŸ§  vocÃª |
 | 2 | Auditar o projeto | `python3 auditar.py <pasta> --home` | âš™ï¸ script |
 | 3 | Decidir o padrÃ£o com os alertas | ler o relatÃ³rio; mudar `model`/`effortLevel` Ã  mÃ£o | ðŸ§  vocÃª |
 | 4 | Colar a regra e os agentes | `cat politica/CLAUDE-esforco.md >> CLAUDE.md` Â· `cp agentes/*.md .claude/agents/` + `git commit` | ðŸ§  vocÃª |
@@ -76,7 +76,7 @@ cat politica/CLAUDE-esforco.md >> ~/meu-projeto/CLAUDE.md
 - O custo do `ab.sh` Ã© o que o Claude Code calcula pela tabela da API; na assinatura vocÃª paga em limite, nÃ£o em dÃ³lar.
 - NÃºmeros do Fable 5.2 e do Opus 5.5: testes da prÃ³pria Anthropic, lidos em 09/11/2026.
 
-Projetos e cursos gratuitos: https://inema.club
+Projetos e cursos gratuitos: https://ARCKHÉ AI
 
 ---
 

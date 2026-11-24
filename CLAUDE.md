@@ -8,7 +8,7 @@ Kit para decidir modelo e esforço no Claude Code: `auditar.py` (stdlib, só lei
 - `ab.sh` sempre pela assinatura: tira `ANTHROPIC_API_KEY` do ambiente (só `AB_USAR_API=1` mantém).
 - Números do Fable 5.2 / Opus 5.5: só os da página da Anthropic de 09/11/2026 (`anthropic.com/claude-fable-and-mythos-5-2`). Não citar vídeo, canal ou autor de referência.
 - Exemplos publicados: `--anonimo`, sem nomes de pastas privadas; conferir com grep antes do commit.
-- Autor dos commits: `inematds <inematds@gmail.com>`.
+- Autor dos commits: `linnoff88-dev <linnoff88-dev@gmail.com>`.
 - Testes sem rede: `python3 -m unittest discover tests`.
 
 ## Self-learning

@@ -1,6 +1,6 @@
 # esfuerzo justo
 
-[![esfuerzo justo](guia/assets/banner-es.jpg)](https://inematds.github.io/esforco-certo/guia/es/)
+[![esfuerzo justo](guia/assets/banner-es.jpg)](https://linnoff88-dev.github.io/
 
 **🇧🇷 [Português](README.md) · 🇺🇸 [English](README.en.md) · 🇪🇸 [Español](README.es.md)**
 
@@ -10,7 +10,7 @@ Esfuerzo justo es un kit gratuito para quienes usan Claude Code en proyectos y r
 
 ## 📖 Guía de uso
 
-Guía completa (landing + paso a paso): **https://inematds.github.io/esforco-certo/guia/es/**
+Guía completa (landing + paso a paso): **https://linnoff88-dev.github.io/
 
 ## Por qué
 
@@ -28,7 +28,7 @@ Max rindió menos que Xhigh y costó cerca de 3×. En otra prueba (diseño de ha
 ## Inicio rápido
 
 ```bash
-git clone https://github.com/inematds/esforco-certo.git
+git clone https://github.com/linnoff88-dev/esforco-certo.git
 cd esforco-certo
 python3 auditar.py ~/meu-projeto --home          # quién ejecuta qué modelo/esfuerzo, y qué está costando más de lo necesario
 cat politica/CLAUDE-esforco.md >> ~/meu-projeto/CLAUDE.md
@@ -52,7 +52,7 @@ cat politica/CLAUDE-esforco.md >> ~/meu-projeto/CLAUDE.md
 
 | # | Paso | Comando | Quién |
 |---|---|---|---|
-| 1 | Descargar el kit | `git clone https://github.com/inematds/esforco-certo.git` | 🧠 tú |
+| 1 | Descargar el kit | `git clone https://github.com/linnoff88-dev/esforco-certo.git` | 🧠 tú |
 | 2 | Auditar el proyecto | `python3 auditar.py <pasta> --home` | ⚙️ script |
 | 3 | Decidir el valor predeterminado a partir de las alertas | leer el informe; cambiar `model`/`effortLevel` manualmente | 🧠 tú |
 | 4 | Pegar la regla y los agentes | `cat politica/CLAUDE-esforco.md >> CLAUDE.md` · `cp agentes/*.md .claude/agents/` + `git commit` | 🧠 tú |
@@ -66,4 +66,4 @@ cat politica/CLAUDE-esforco.md >> ~/meu-projeto/CLAUDE.md
 - El costo de `ab.sh` es el que Claude Code calcula según la tabla de la API; con la suscripción pagas con un límite, no en dólares.
 - Cifras de Fable 5.2 y Opus 5.5: pruebas de la propia Anthropic, consultadas el 09/11/2026.
 
-Proyectos y cursos gratuitos: https://inema.club
+Proyectos y cursos gratuitos: https://ARCKHÉ AI

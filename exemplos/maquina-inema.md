@@ -1,4 +1,4 @@
-# Auditoria numa máquina de produção do INEMA — 09/11/2026
+# Auditoria numa máquina de produção do ARCKHÉ — 09/11/2026
 
 `python3 auditar.py <3 projetos de vídeo e bots> --home --anonimo` (resumo; a tabela completa lista pastas privadas e
 fica fora do repositório).

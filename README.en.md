@@ -1,6 +1,6 @@
 # right effort
 
-[![right effort](guia/assets/banner-en.jpg)](https://inematds.github.io/esforco-certo/guia/en/)
+[![right effort](guia/assets/banner-en.jpg)](https://linnoff88-dev.github.io/
 
 **🇧🇷 [Português](README.md) · 🇺🇸 [English](README.en.md) · 🇪🇸 [Español](README.es.md)**
 
@@ -10,7 +10,7 @@ Right effort is a free toolkit for people who use Claude Code in projects and bo
 
 ## 📖 User guide
 
-Complete guide (landing page + walkthrough): **https://inematds.github.io/esforco-certo/guia/en/**
+Complete guide (landing page + walkthrough): **https://linnoff88-dev.github.io/
 
 ## Why
 
@@ -28,7 +28,7 @@ Max scored lower than Xhigh and cost about 3× as much. In another test (hardwar
 ## Quick start
 
 ```bash
-git clone https://github.com/inematds/esforco-certo.git
+git clone https://github.com/linnoff88-dev/esforco-certo.git
 cd esforco-certo
 python3 auditar.py ~/meu-projeto --home          # who runs on which model/effort, and what is expensive
 cat politica/CLAUDE-esforco.md >> ~/meu-projeto/CLAUDE.md
@@ -52,7 +52,7 @@ cat politica/CLAUDE-esforco.md >> ~/meu-projeto/CLAUDE.md
 
 | # | Step | Command | Who |
 |---|---|---|---|
-| 1 | Download the toolkit | `git clone https://github.com/inematds/esforco-certo.git` | 🧠 you |
+| 1 | Download the toolkit | `git clone https://github.com/linnoff88-dev/esforco-certo.git` | 🧠 you |
 | 2 | Audit the project | `python3 auditar.py <pasta> --home` | ⚙️ script |
 | 3 | Choose the default based on the alerts | read the report; manually change `model`/`effortLevel` | 🧠 you |
 | 4 | Add the rule and agents | `cat politica/CLAUDE-esforco.md >> CLAUDE.md` · `cp agentes/*.md .claude/agents/` + `git commit` | 🧠 you |
@@ -66,4 +66,4 @@ cat politica/CLAUDE-esforco.md >> ~/meu-projeto/CLAUDE.md
 - The cost shown by `ab.sh` is what Claude Code calculates using the API price table; with a subscription, you pay against a limit, not in dollars.
 - Fable 5.2 and Opus 5.5 figures: Anthropic’s own tests, reviewed on 11/09/2026.
 
-Free projects and courses: https://inema.club
+Free projects and courses: https://ARCKHÉ AI
