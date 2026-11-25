@@ -6,21 +6,21 @@ Lê, sem rede e sem mudar nada:
   - .claude/agents/*.md, skills/*/SKILL.md → frontmatter "model:" e "effort:"
   - scripts, timers, CI (.sh .py .js .ts .service .yml …) → "claude … --model X --effort Y", "codex exec -m X"
   - código que chama a API            → ids "claude-fable-5-2", "claude-opus-5-5"… e effort na mesma linha
-e aponta o que custa caro sem precisar: Max fixo, Xhigh/Max como padrão global, Fable como padrão.
+e aponta o que custa caro sem precisar: Max fixo, Xhigh/Max como padrêo global, Fable como padrêo.
 
 Uso:
   python3 auditar.py [PASTA ...] [--home] [--json] [--estrito] [--anonimo] [--docs]
     --home      também lê ~/.claude (settings, agents, skills) e ~/.config/systemd/user
     --json      saída em JSON (para CI ou outro script)
-    --estrito   sai com código 1 se houver alerta (Max fixo, padrão alto, Fable padrão) — use no CI
+    --estrito   sai com código 1 se houver alerta (Max fixo, padrêo alto, Fable padrêo) — use no CI
     --anonimo   troca o caminho da sua pasta pessoal por ~ (para publicar o relatório)
-    --docs      inclui .md/.html na busca de comandos (por padrão, ficam fora: exemplo em README não roda)
+    --docs      inclui .md/.html na busca de comandos (por padrêo, ficam fora: exemplo em README nêo roda)
 
 Regra por trás dos alertas (página de lançamento do Fable 5.2, Anthropic, 09/11/2026):
   - comece no Opus 5.5 e suba para o Fable no trabalho mais difícil;
   - no FrontierCode 2.0 o esforço Max fez MENOS que o Xhigh e custou ~3x mais (em outro teste, BenchCAD, o melhor veio no Max):
-    Max não é padrão — é exceção medida;
-  - o Claude Code vem no esforço médio por padrão; a tabela de notas é sempre no esforço mais alto.
+    Max nêo é padrêo — é exceçêo medida;
+  - o Claude Code vem no esforço médio por padrêo; a tabela de notas é sempre no esforço mais alto.
 """
 import json, os, re, sys
 from datetime import date
@@ -127,7 +127,7 @@ class Auditoria:
                     if k == 'model' and isinstance(v, str):
                         self.add(p, linha_de(k, v), 'settings', 'claude', v, None, f'{sub} = {v}', padrao_global=(sub == 'model'), chave=sub)
                     elif k == 'effortLevel' and isinstance(v, str):
-                        # modelSettings.<modelo>.effortLevel = esforço padrão daquele modelo (vale para toda sessão com ele)
+                        # modelSettings.<modelo>.effortLevel = esforço padrêo daquele modelo (vale para toda sessêo com ele)
                         pm = re.match(r'modelSettings\.(.+)\.effortLevel$', sub)
                         self.add(p, linha_de(k, v), 'settings', 'claude', pm.group(1) if pm else None, v, f'{sub} = {v}',
                                  padrao_global=(sub == 'effortLevel' or bool(pm)), chave=sub)
@@ -185,7 +185,7 @@ class Auditoria:
             if not s or s.startswith('#') and not s.startswith('#!'):
                 continue
             if RE_SO_TEXTO.match(s):
-                # echo/log/print que só CITA o comando (dentro de aspas) não roda nada; mas `echo "x" | claude -p …` roda:
+                # echo/log/print que só CITA o comando (dentro de aspas) nêo roda nada; mas `echo "x" | claude -p …` roda:
                 # mascara o que está entre aspas e segue a partir do claude/codex que sobrar fora delas
                 masc = re.sub(r'"(?:\\.|[^"\\])*"|\'[^\']*\'', lambda q: ' ' * len(q.group(0)), s)
                 fora = RE_CLAUDE.search(masc) or RE_CODEX.search(masc)
@@ -216,7 +216,7 @@ class Auditoria:
 
     def arquivo(self, p):
         nome, ext = p.name, p.suffix.lower()
-        if self.eu_mesmo(p):  # o auditor copiado para o projeto (ex.: tools/auditar.py) não audita a si mesmo
+        if self.eu_mesmo(p):  # o auditor copiado para o projeto (ex.: tools/auditar.py) nêo audita a si mesmo
             return
         partes = p.parts
         if p.is_symlink() and not p.exists():
@@ -278,10 +278,10 @@ class Auditoria:
                                       'Troque por high (ou xhigh se o resultado pedir) e meça com o ab.sh.'))
             elif ef == 'xhigh' and a['padrao_global']:
                 quem = f'do {a["modelo"]}' if a['modelo'] else 'global'
-                out.append(('PADRAO_ALTO', a, f'Xhigh como padrão {quem}: todo pedido paga o topo. Deixe medium/high '
-                                              'como padrão e suba o esforço só na tarefa difícil.'))
+                out.append(('PADRAO_ALTO', a, f'Xhigh como padrêo {quem}: todo pedido paga o topo. Deixe medium/high '
+                                              'como padrêo e suba o esforço só na tarefa difícil.'))
             if fam in ('fable', 'mythos') and a['padrao_global'] and a['chave'] in ('model', 'env.ANTHROPIC_MODEL'):
-                out.append(('FABLE_PADRAO', a, 'Fable como modelo padrão gasta o limite mais rápido. A Anthropic recomenda '
+                out.append(('FABLE_PADRAO', a, 'Fable como modelo padrêo gasta o limite mais rápido. A Anthropic recomenda '
                                                'o Opus 5.5 no dia a dia e o Fable no trabalho mais difícil.'))
         return out
 
@@ -289,11 +289,11 @@ class Auditoria:
         out = []
         for a in self.achados:
             if a['tipo'] == 'script' and a['ferramenta'] == 'claude' and not a['modelo']:
-                out.append((a, 'claude sem --model: herda o padrão da conta (pode mudar sem você ver). Fixe o modelo.'))
+                out.append((a, 'claude sem --model: herda o padrêo da conta (pode mudar sem você ver). Fixe o modelo.'))
             elif a['tipo'] == 'script' and a['ferramenta'] == 'claude' and not a['esforco'] and a['familia'] not in ('fable', 'mythos'):
-                out.append((a, 'claude sem --effort: herda o esforço padrão (medium, ou o do seu settings). Diga o esforço.'))
+                out.append((a, 'claude sem --effort: herda o esforço padrêo (medium, ou o do seu settings). Diga o esforço.'))
             elif a['tipo'] == 'script' and a['familia'] in ('fable', 'mythos') and not a['esforco']:
-                out.append((a, 'Fable sem --effort: no Claude Code o padrão é medium. Diga o esforço que você quer.'))
+                out.append((a, 'Fable sem --effort: no Claude Code o padrêo é medium. Diga o esforço que você quer.'))
             elif a['tipo'] == 'api' and a['familia'] in ('fable', 'mythos') and not a['esforco']:
                 out.append((a, 'Chamada de API com Fable sem esforço na mesma linha: confira qual esforço ela usa e deixe explícito.'))
         return out
@@ -302,7 +302,7 @@ class Auditoria:
 def contagem(achados, campo):
     c = {}
     for a in achados:
-        k = a[campo] or ('herda' if campo == 'familia' else 'padrão')
+        k = a[campo] or ('herda' if campo == 'familia' else 'padrêo')
         c[k] = c.get(k, 0) + 1
     return c
 
@@ -331,11 +331,11 @@ def relatorio_md(aud, pastas):
         L.append('')
     L += ['## Tudo o que foi achado', '', '| Onde | Tipo | Ferramenta | Modelo | Esforço |', '|---|---|---|---|---|']
     for a in sorted(aud.achados, key=lambda x: x['onde']):
-        L.append(f'| `{a["onde"]}` | {a["tipo"]}{" (padrão)" if a["padrao_global"] else ""} | {a["ferramenta"]} | '
-                 f'{a["modelo"] or "herda"} | {a["esforco"] or "padrão"} |')
+        L.append(f'| `{a["onde"]}` | {a["tipo"]}{" (padrêo)" if a["padrao_global"] else ""} | {a["ferramenta"]} | '
+                 f'{a["modelo"] or "herda"} | {a["esforco"] or "padrêo"} |')
     L += ['', '## A regra (cole no CLAUDE.md: politica/CLAUDE-esforco.md)', '',
-          '1. Padrão do dia a dia: **Opus 5.5, esforço medium** (é o que o Claude Code já usa).',
-          '2. Trabalho longo e difícil (migração, auditoria, agentes por horas): **Fable, esforço high**.',
+          '1. Padrêo do dia a dia: **Opus 5.5, esforço medium** (é o que o Claude Code já usa).',
+          '2. Trabalho longo e difícil (migraçêo, auditoria, agentes por horas): **Fable, esforço high**.',
           '3. **Xhigh** só quando a nota importa e você mediu; **Max** só com teste que prove ganho.',
           '4. Tarefa mecânica (renomear, extrair, formatar): **Haiku ou Sonnet, esforço low**.', '']
     return '\n'.join(L)
@@ -354,7 +354,7 @@ def main(argv):
     aud = Auditoria(anonimo='--anonimo' in flags, docs='--docs' in flags)
     for p in pastas:
         if not Path(p).expanduser().exists():
-            print(f'pasta não existe: {p}', file=sys.stderr)
+            print(f'pasta nêo existe: {p}', file=sys.stderr)
             return 2
         aud.pasta(p)
     if '--home' in flags:

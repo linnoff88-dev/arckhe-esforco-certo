@@ -7,16 +7,16 @@
 # Exemplos:
 #   ./ab.sh "Revise src/ e liste os 5 riscos mais graves, com arquivo e linha"                 # só lê
 #   ./ab.sh "Corrija o teste quebrado em tests/" --editar --checar "npm ci && npm test" -c opus:high -c fable:high
-# Padrão: -c opus:high -c fable:medium -c fable:high
+# Padrêo: -c opus:high -c fable:medium -c fable:high
 #
 # Como roda:
-#   - sem --editar: cada combinação roda na PASTA só com as ferramentas de leitura (Read, Grep, Glob: não muda nada) e a resposta
-#     fica em .ab/resultado-<data>/<combinação>.md (o modo "plan" não serve: nele o Claude Code troca o Haiku pelo Sonnet);
-#   - com --editar: cada combinação ganha uma cópia própria (git worktree em .ab/<combinação>), pode editar arquivos (acceptEdits)
+#   - sem --editar: cada combinaçêo roda na PASTA só com as ferramentas de leitura (Read, Grep, Glob: nêo muda nada) e a resposta
+#     fica em .ab/resultado-<data>/<combinaçêo>.md (o modo "plan" nêo serve: nele o Claude Code troca o Haiku pelo Sonnet);
+#   - com --editar: cada combinaçêo ganha uma cópia própria (git worktree em .ab/<combinaçêo>), pode editar arquivos (acceptEdits)
 #     e, no fim, o script roda o --checar dentro de cada cópia. A cópia sai do ÚLTIMO COMMIT e vem sem o que está fora
 #     do git (node_modules, .venv): commite antes e instale as dependências no --checar. As cópias ficam para você olhar
-#     (apagar: git worktree remove .ab/<combinação>).
-#   - ANTHROPIC_API_KEY é retirada do ambiente: o teste usa a ASSINATURA, não a API. Para medir na API de propósito: AB_USAR_API=1.
+#     (apagar: git worktree remove .ab/<combinaçêo>).
+#   - ANTHROPIC_API_KEY é retirada do ambiente: o teste usa a ASSINATURA, nêo a API. Para medir na API de propósito: AB_USAR_API=1.
 #   - Cada rodada gasta o seu limite (o Fable gasta mais rápido). Comece com uma tarefa pequena e real.
 set -uo pipefail
 TAREFA=""; DIR=$PWD; EDITAR=0; CHECAR=""; TURNOS=${AB_TURNOS:-40}; TETO=${AB_TIMEOUT:-1800}; CFGS=()
@@ -36,7 +36,7 @@ done
 for c in "${CFGS[@]}"; do
   case "${c#*:}" in low|medium|high|xhigh|max) ;; *) echo "esforço inválido em '$c' (use low|medium|high|xhigh|max)" >&2; exit 2 ;; esac
 done
-command -v claude >/dev/null || { echo "claude (Claude Code) não está no PATH" >&2; exit 2; }
+command -v claude >/dev/null || { echo "claude (Claude Code) nêo está no PATH" >&2; exit 2; }
 TO=$(command -v timeout || command -v gtimeout || true)   # macOS: brew install coreutils traz o gtimeout
 [ -n "$TO" ] || echo "aviso: sem timeout/gtimeout; cada rodada roda sem teto de tempo" >&2
 comteto(){ local s=$1; shift; if [ -n "$TO" ]; then "$TO" "$s" "$@"; else "$@"; fi; }
@@ -45,7 +45,7 @@ if [ $EDITAR = 1 ]; then
   git -C "$DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo "--editar precisa de um repositório git em $DIR" >&2; exit 2; }
   [ -z "$(git -C "$DIR" status --porcelain -- . ':!.ab')" ] || { echo "--editar: deixe o repositório limpo (commit ou stash) antes" >&2; exit 2; }
 fi
-[ -n "$CHECAR" ] && [ $EDITAR = 0 ] && echo "aviso: --checar só roda com --editar (sem cópia não há o que testar); ignorado" >&2
+[ -n "$CHECAR" ] && [ $EDITAR = 0 ] && echo "aviso: --checar só roda com --editar (sem cópia nêo há o que testar); ignorado" >&2
 SAI="$DIR/.ab/resultado-$(date +%Y%m%d-%H%M%S)"; mkdir -p "$SAI"   # tudo do teste fica em .ab/ (ponha .ab/ no .gitignore)
 printf '%s\n' "$TAREFA" > "$SAI/TAREFA.txt"
 echo "tarefa: $TAREFA"; echo "combinações: ${CFGS[*]} · saída: $SAI"
@@ -79,7 +79,7 @@ pens = (u.get('output_tokens_details') or {}).get('thinking_tokens', 0)
 modelo = ','.join((d.get('modelUsage') or {}).keys()) or '?'
 st = 'erro' if d.get('is_error') else 'ok'
 if pedido.lower() not in modelo.lower():
-    st = f'⚠ pediu {pedido}, rodou'   # o Claude Code trocou o modelo: a comparação não vale
+    st = f'⚠ pediu {pedido}, rodou'   # o Claude Code trocou o modelo: a comparaçêo nêo vale
 print(f"{nome}\t{st} ({modelo})\t{d.get('duration_ms', 0)/1000:.0f} s\t{d.get('num_turns', '-')}\t"
       f"{u.get('output_tokens', 0)} (pensando {pens})\tUS$ {d.get('total_cost_usd', 0):.3f}\t{chk}")
 PY
@@ -89,11 +89,11 @@ done
 {
   echo "# A/B de esforço — $(date '+%d/%m/%Y %H:%M')"; echo
   echo "Tarefa: $TAREFA"; echo
-  echo "| Combinação | Status (modelo) | Tempo | Turnos | Tokens de saída | Custo equivalente* | Teste |"
+  echo "| Combinaçêo | Status (modelo) | Tempo | Turnos | Tokens de saída | Custo equivalente* | Teste |"
   echo "|---|---|---|---|---|---|---|"
   awk -F'\t' '{ s = "|"; for (i = 1; i <= NF; i++) s = s " " $i " |"; print s }' "$SAI/linhas.tsv"
   echo
-  echo "\* Custo que o Claude Code calcula pela tabela da API. Na assinatura você não paga isso: paga em limite."
-  echo "Leia as respostas ($SAI/*.md) antes de decidir: o mais barato que resolve bem é o seu padrão."
+  echo "\* Custo que o Claude Code calcula pela tabela da API. Na assinatura você nêo paga isso: paga em limite."
+  echo "Leia as respostas ($SAI/*.md) antes de decidir: o mais barato que resolve bem é o seu padrêo."
 } > "$SAI/RESULTADO.md"
 echo; cat "$SAI/RESULTADO.md"

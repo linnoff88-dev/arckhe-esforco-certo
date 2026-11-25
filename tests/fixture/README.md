@@ -1,1 +1,1 @@
-Exemplo de doc: claude -p --model fable --effort max "não deve contar sem --docs"
+Exemplo de doc: claude -p --model fable --effort max "nêo deve contar sem --docs"

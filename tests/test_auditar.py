@@ -49,7 +49,7 @@ class TestAuditar(unittest.TestCase):
 
     def test_comentario_e_docs_ficam_fora(self):
         self.assertFalse([a for a in self.ach if 'README' in a['onde']])
-        self.assertFalse([a for a in self.ach if 'não conta' in a['trecho']])
+        self.assertFalse([a for a in self.ach if 'nêo conta' in a['trecho']])
         _, out = rodar(str(FIX), '--json', '--docs')
         self.assertTrue([a for a in json.loads(out)['achados'] if 'README' in a['onde']])
 
@@ -76,7 +76,7 @@ class TestAuditar(unittest.TestCase):
 
     def test_fable_padrao_so_pela_chave_model(self):
         fab = [a for a in self.d['alertas'] if a['codigo'] == 'FABLE_PADRAO']
-        self.assertEqual(len(fab), 1)  # modelSettings.claude-fable-5-1.effortLevel não é "Fable como padrão"
+        self.assertEqual(len(fab), 1)  # modelSettings.claude-fable-5-1.effortLevel nêo é "Fable como padrêo"
 
     def test_log_e_echo_nao_contam(self):
         self.assertFalse([a for a in self.ach if a['trecho'].startswith(('log ', 'echo '))])
@@ -111,7 +111,7 @@ class TestAuditar(unittest.TestCase):
 
     def test_dica_sem_effort(self):
         dicas = [d for d in self.d['dicas'] if 'sem --effort' in d['msg']]
-        self.assertTrue(dicas)  # rodar.sh: claude -p com --model e sem --effort não passa calado
+        self.assertTrue(dicas)  # rodar.sh: claude -p com --model e sem --effort nêo passa calado
 
     def test_pasta_inexistente(self):
         rc, _ = rodar('/nao/existe/mesmo')
